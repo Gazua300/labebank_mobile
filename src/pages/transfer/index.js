@@ -13,7 +13,7 @@ import {
 
 
 const transfer = ()=>{
-  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [recipientName, setRecipientName] = useState('')
   const [recipientCpf, setRecipientCpf] = useState('')
@@ -22,7 +22,7 @@ const transfer = ()=>{
 
   const transfer = ()=>{
     const body = {
-      name,
+      email,
       cpf,
       recipientName,
       recipientCpf,
@@ -46,9 +46,9 @@ const transfer = ()=>{
       <View style={styles.container}>
 
         <TextInput style={styles.input}
-          onChangeText={setName}
-          value={name}
-          placeholder='Nome'/>
+          onChangeText={setEmail}
+          value={email}
+          placeholder='nome@email.com'/>
 
         <TextInput style={styles.input}
           onChangeText={setCpf}
@@ -81,7 +81,7 @@ const transfer = ()=>{
           <TouchableOpacity style={styles.btn}
             onPress={transfer}>
             <Text>
-              Consultar saldo
+              Transferir
             </Text>
           </TouchableOpacity>
 

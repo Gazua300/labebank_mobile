@@ -14,24 +14,24 @@ import {
 
 
 const deposit = ()=>{
-  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [value, setValue] = useState('')
 
 
   const deposit = ()=>{
     const body = {
-      name,
+      email,
       cpf,
       value: Number(value)
     }
     axios.post(`${url}/deposit`, body).then(res=>{
       alert(res.data)
-      setName('')
+      setEmail('')
       setCpf('')
       setValue('')
     }).catch(err=>{
-      alert(err.response.data.message)
+      alert(err.response.data)
     })
   }
 
@@ -41,9 +41,9 @@ const deposit = ()=>{
       <View style={styles.container}>
 
         <TextInput style={styles.input}
-          onChangeText={setName}
-          value={name}
-          placeholder='Nome'/>
+          onChangeText={setEmail}
+          value={email}
+          placeholder='nome@email.com'/>
 
         <TextInput style={styles.input}
           onChangeText={setCpf}
@@ -63,7 +63,7 @@ const deposit = ()=>{
           <TouchableOpacity style={styles.btn}
             onPress={deposit}>
             <Text>
-              Consultar saldo
+              Depositar
             </Text>
           </TouchableOpacity>
 
