@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './style'
 import axios from 'axios'
 import { url } from '../../constants/urls'
+import { Context } from '../../context/Context'
 import {
   Text,
   ScrollView,
@@ -13,11 +14,18 @@ import {
 
 
 const payment = ()=>{
+  const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [date, setDate] = useState('')
   const [value, setValue] = useState('')
   const [description, setDescription] = useState('')
+
+
+
+  useEffect(()=>{
+    setters.noToken()
+  }, [])
 
 
   const pay = ()=>{

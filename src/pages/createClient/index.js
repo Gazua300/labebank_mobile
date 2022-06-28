@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { url } from '../../constants/urls'
+import { Context } from '../../context/Context'
 import styles from './style'
 import {
   Text,
@@ -14,6 +14,7 @@ import {
 
 
 const createClient = (props)=>{
+  const { setters } = useContext(Context)
   const [name, setName] = useState('')
   const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
@@ -23,13 +24,9 @@ const createClient = (props)=>{
 
 
 
-  useEffect(()=>{
-    const token = AsyncStorage.getItem('token')
-
-    if(token){
-      props.navigation.navigate('Balance')
-    }
-  }, [])
+  
+  
+  
 
 
   const signin = ()=>{
@@ -43,7 +40,7 @@ const createClient = (props)=>{
     }
     
     axios.post(`${url}/create`, body).then(res=>{
-      AsyncStorage.setItem('token', res.data)
+      setters.getToken(res.data)
       props.navigation.navigate('Balance')
       setName('')
       setCpf('')
@@ -52,7 +49,7 @@ const createClient = (props)=>{
       setPassword('')
       setPasswordConf('')
     }).catch(err=>{
-      alert(err.response.data)
+      alert(err.response.data.message)
     })
   }
 

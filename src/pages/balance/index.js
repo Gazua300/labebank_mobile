@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { url } from '../../constants/urls'
 import styles from './style'
+import { Context } from '../../context/Context'
 import {
   Text,
   ScrollView,
@@ -14,17 +14,17 @@ import {
 
 
 const balance = (props)=>{
+  const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
 
-  useEffect(()=>{
-    const token = AsyncStorage.getItem('token')
 
-    if(!token){
-      props.navigation.navigate('Login')
-    }
+
+  useEffect(()=>{
+    setters.noToken()
   }, [])
 
+  
 
   const getBalance = ()=>{
     const body = {
@@ -36,7 +36,7 @@ const balance = (props)=>{
       setEmail('')
       setCpf('')
     }).catch(err=>{
-      alert(err.response.data)
+      alert(err.response.data.message)
     })
 
   }

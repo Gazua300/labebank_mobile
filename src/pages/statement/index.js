@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import styles from './style'
 import { url } from '../../constants/urls'
 import { convertDate } from '../../utils/convertDate'
+import { Context } from '../../context/Context'
 import {
   ScrollView,
   TextInput,
@@ -14,9 +15,16 @@ import {
 
 
 const statement = ()=>{
+  const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [state, setState] = useState([])
+
+
+
+  useEffect(()=>{
+    setters.noToken()
+  }, [])
 
 
   const getStatement = ()=>{

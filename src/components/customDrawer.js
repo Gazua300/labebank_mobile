@@ -14,8 +14,12 @@ function CustomDrawer(props){
 
 
   const logout = async()=>{
-    await AsyncStorage.clear()
-    props.navigation.navigate('Login')
+    try{
+      await AsyncStorage.clear()
+      props.navigation.navigate('Login')
+    }catch(e){
+      alert(e)
+    }
   }
 
   return(

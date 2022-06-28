@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import styles from './style'
 import { url } from '../../constants/urls'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Context } from '../../context/Context'
 import {
   Text,
   ScrollView,
@@ -14,21 +14,13 @@ import {
 
 
 const login = (props)=>{
+  const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [password, setPassword] = useState('')
 
 
-  useEffect(()=>{
-    const token = AsyncStorage.getItem('token')
-
-    if(token){
-      props.navigation.navigate('Balance')
-    }
-  }, [])
-
-
-
+      
   const enter = ()=>{
     const body = {
       email,
@@ -36,7 +28,7 @@ const login = (props)=>{
       password
     }
     axios.post(`${url}/login`, body).then(res=>{
-      AsyncStorage.setItem('token', res.data)
+      setters.getToken(res.data)
       props.navigation.navigate('Balance')
       setEmail('')
       setCpf('')

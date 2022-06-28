@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { url } from '../../constants/urls'
 import styles from './style'
+import { Context } from '../../context/Context'
 import {
   Text,
   ScrollView,
@@ -13,11 +14,18 @@ import {
 
 
 const transfer = ()=>{
+  const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [recipientName, setRecipientName] = useState('')
   const [recipientCpf, setRecipientCpf] = useState('')
   const [value, setValue] = useState('')
+
+
+
+  useEffect(()=>{
+    setters.noToken()
+  }, [])
 
 
   const transfer = ()=>{
@@ -36,7 +44,7 @@ const transfer = ()=>{
       setRecipientName('')
       setValue('')
     }).catch(err=>{
-      alert(err.response.data)
+      alert(err.response.data.message)
     })
   }
 
