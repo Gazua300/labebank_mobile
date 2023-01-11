@@ -1,1 +1,1 @@
-export const url = 'https://labebank.herokuapp.com/accounts'
+export const url = 'https://labebank-production.up.railway.app'

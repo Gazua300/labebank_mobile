@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import { url } from '../../constants/urls'
 import styles from './style'
+import { url } from '../../constants/urls'
 import { Context } from '../../context/Context'
 import {
   Text,
@@ -13,32 +13,29 @@ import {
 
 
 
-const balance = (props)=>{
+const login = (props)=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
+  const [password, setPassword] = useState('')
 
 
-
-  useEffect(()=>{
-    setters.noToken()
-  }, [])
-
-  
-
-  const getBalance = ()=>{
+      
+  const enter = ()=>{
     const body = {
       email,
-      cpf
+      cpf,
+      password
     }
-    axios.post(`${url}/balance`, body).then(res=>{
-      alert(res.data)
+    axios.post(`${url}/accounts/login`, body).then(res=>{
+      setters.getToken(res.data)
+      props.navigation.navigate('Balance')
       setEmail('')
       setCpf('')
+      setPassword('')
     }).catch(err=>{
-      alert(err.response.data.message)
+      alert(err.response.data)
     })
-
   }
 
 
@@ -47,22 +44,27 @@ const balance = (props)=>{
       <View style={styles.container}>
 
         <TextInput style={styles.input}
-          onChangeText={setEmail}
+          placeholder='nome@email.com'
           value={email}
-          placeholder='nome@email.com'/>
+          onChangeText={setEmail}/>
 
         <TextInput style={styles.input}
           onChangeText={setCpf}
           value={cpf}
           keyboardType='numeric'
-          placeholder='CPF'
-          placeholderTextColor='gray'/>
+          placeholder='CPF'/>
+
+        <TextInput style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry={true}
+          placeholder='Senha'/>
 
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn}
-            onPress={getBalance}>
+            onPress={enter}>
             <Text>
-              Consultar saldo
+              Entrar
             </Text>
           </TouchableOpacity>
 
@@ -71,4 +73,6 @@ const balance = (props)=>{
     </ScrollView>
   )
 }
-export default balance
+
+
+export default login
