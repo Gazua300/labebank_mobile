@@ -13,7 +13,7 @@ import {
 
 
 
-const balance = (props)=>{
+const Balance = (props)=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
@@ -71,4 +71,4 @@ const balance = (props)=>{
     </ScrollView>
   )
 }
-export default balance
+export default Balance

@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { StatusBar } from 'react-native'
 import AuthProvider from './src/context/Context'
@@ -11,23 +12,21 @@ import Statement from './src/pages/Statement'
 import Payment from './src/pages/Payment'
 import Deposit from './src/pages/Deposit'
 import Transfer from './src/pages/Transfer'
+import Splash from './src/splash/Splash'
 import CustomDrawer from './src/components/customDrawer'
 
 
 
 
 const Drawer = createDrawerNavigator()
+const Stack = createNativeStackNavigator()
 
 
 
-const App = ()=>{
-  return (
-    <NavigationContainer>
-      <StatusBar style='auto'/>
-      <AuthProvider>
+function MyDrawer(){
+  return(
         <Drawer.Navigator
           screenOptions={screenOptions}
-          initialRouteName='Login'
           drawerContent={props => <CustomDrawer {...props}/>}>
 
           <Drawer.Screen
@@ -74,6 +73,90 @@ const App = ()=>{
             }}/>
 
         </Drawer.Navigator>
+  )
+}
+
+
+const App = ()=>{
+  return (
+    <NavigationContainer>
+      <StatusBar barStyle='light-content'
+        backgroundColor='gray'/>
+      <AuthProvider>
+        <Stack.Navigator
+          initialRouteName='Splash'>
+          
+          <Stack.Screen
+            name='Splash'
+            component={Splash}
+            options={{
+              headerShown: false
+            }}/>
+          
+          <Stack.Screen
+            name='MyDrawer'
+            component={MyDrawer}
+            options={{
+              headerShown: false
+            }}
+            />
+
+        </Stack.Navigator>
+        
+        {/* <Drawer.Navigator
+          screenOptions={screenOptions}
+          initialRouteName='Splash'
+          drawerContent={props => <CustomDrawer {...props}/>}>
+
+          <Drawer.Screen
+            name='Splash'
+            component={Splash}
+            />
+
+          <Drawer.Screen
+            name='Login'
+            component={Login}/>
+
+          <Drawer.Screen
+            name='Signin'
+            component={Signin}/>
+
+          <Drawer.Screen
+            name='Balance'
+            component={Balance}
+            options={{
+              title: 'Saldo'
+            }}/>
+
+          <Drawer.Screen
+            name='Statement'
+            component={Statement}
+            options={{
+              title: 'Extrato'
+            }}/>
+
+          <Drawer.Screen
+            name='Payment'
+            component={Payment}
+            options={{
+              title: 'Pagamento'
+            }}/>
+
+          <Drawer.Screen
+            name='Deposit'
+            component={Deposit}
+            options={{
+              title: 'Deposito'
+            }}/>
+
+          <Drawer.Screen
+            name='Transfer'
+            component={Transfer}
+            options={{
+              title: 'Transferência'
+            }}/>
+
+        </Drawer.Navigator> */}
       </AuthProvider>
     </NavigationContainer>
   )

@@ -13,7 +13,7 @@ import {
 
 
 
-const createClient = (props)=>{
+const CreateClient = (props)=>{
   const { setters } = useContext(Context)
   const [name, setName] = useState('')
   const [cpf, setCpf] = useState('')
@@ -39,7 +39,7 @@ const createClient = (props)=>{
       passwordConf
     }
     
-    axios.post(`${url}/create`, body).then(res=>{
+    axios.post(`${url}/accounts/create`, body).then(res=>{
       setters.getToken(res.data)
       props.navigation.navigate('Balance')
       setName('')
@@ -105,4 +105,4 @@ const createClient = (props)=>{
     </ScrollView>
   )
 }
-export default createClient
+export default CreateClient

@@ -14,7 +14,7 @@ import {
 
 
 
-const deposit = ()=>{
+const Deposit = ()=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
@@ -33,7 +33,7 @@ const deposit = ()=>{
       cpf,
       value: Number(value)
     }
-    axios.post(`${url}/deposit`, body).then(res=>{
+    axios.post(`${url}/accounts/deposit`, body).then(res=>{
       alert(res.data)
       setEmail('')
       setCpf('')
@@ -80,4 +80,4 @@ const deposit = ()=>{
     </ScrollView>
   )
 }
-export default deposit
+export default Deposit

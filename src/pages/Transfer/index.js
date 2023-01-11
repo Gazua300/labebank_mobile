@@ -13,7 +13,7 @@ import {
 
 
 
-const transfer = ()=>{
+const Transfer = ()=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
@@ -36,7 +36,7 @@ const transfer = ()=>{
       recipientCpf,
       value: Number(value)
     }
-    axios.post(`${url}/transfer`, body).then(res=>{
+    axios.post(`${url}/accounts/transfer`, body).then(res=>{
       alert(res.data)
       setName('')
       setCpf('')
@@ -98,4 +98,4 @@ const transfer = ()=>{
     </ScrollView>
   )
 }
-export default transfer
+export default Transfer

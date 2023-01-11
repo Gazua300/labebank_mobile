@@ -13,7 +13,7 @@ import {
 
 
 
-const login = (props)=>{
+const Login = (props)=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
@@ -75,4 +75,4 @@ const login = (props)=>{
 }
 
 
-export default login
+export default Login

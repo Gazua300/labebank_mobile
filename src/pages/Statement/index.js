@@ -14,7 +14,7 @@ import {
 
 
 
-const statement = ()=>{
+const Statement = ()=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
@@ -32,7 +32,7 @@ const statement = ()=>{
       email,
       cpf
     }
-    axios.post(`${url}/statement`, body).then(res=>{
+    axios.post(`${url}/accounts/statement`, body).then(res=>{
       setState(res.data)
     }).catch(err=>{
       alert(err.response.data.message)
@@ -77,4 +77,4 @@ const statement = ()=>{
     </ScrollView>
   )
 }
-export default statement
+export default Statement

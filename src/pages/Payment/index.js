@@ -13,7 +13,7 @@ import {
 
 
 
-const payment = ()=>{
+const Payment = ()=>{
   const { setters } = useContext(Context)
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
@@ -36,7 +36,7 @@ const payment = ()=>{
       value: Number(value),
       description
     }
-    axios.post(`${url}/payment`, body).then(res=>{
+    axios.post(`${url}/accounts/payment`, body).then(res=>{
       alert(res.data)
       setEmail('')
       setCpf('')
@@ -98,4 +98,4 @@ const payment = ()=>{
     </ScrollView>
   )
 }
-export default payment
+export default Payment
