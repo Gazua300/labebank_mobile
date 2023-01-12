@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import styles from './style'
 import { url } from '../../constants/urls'
@@ -14,24 +15,40 @@ import {
 
 
 const Login = (props)=>{
-  const { setters } = useContext(Context)
+  const { setters, requests } = useContext(Context)
   const [email, setEmail] = useState('')
-  const [cpf, setCpf] = useState('')
   const [password, setPassword] = useState('')
 
+
+  
+  useEffect(()=>{
+    token()
+  }, [])
+
+
+  const token = async()=>{
+    try{
+      const value = AsyncStorage.getItem('token')
+      if(value !== null){
+        props.navigation.navigate('Balance')
+      }
+    }catch(e){
+      alert(e)
+    }
+  }
 
       
   const enter = ()=>{
     const body = {
       email,
-      cpf,
       password
     }
     axios.post(`${url}/accounts/login`, body).then(res=>{
-      setters.getToken(res.data)
+      setters.getToken(res.data.token)
+      setters.getId(res.data.id)
+      requests.getUser()
       props.navigation.navigate('Balance')
       setEmail('')
-      setCpf('')
       setPassword('')
     }).catch(err=>{
       alert(err.response.data)
@@ -47,12 +64,6 @@ const Login = (props)=>{
           placeholder='nome@email.com'
           value={email}
           onChangeText={setEmail}/>
-
-        <TextInput style={styles.input}
-          onChangeText={setCpf}
-          value={cpf}
-          keyboardType='numeric'
-          placeholder='CPF'/>
 
         <TextInput style={styles.input}
           onChangeText={setPassword}

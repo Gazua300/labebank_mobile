@@ -1,36 +1,49 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import { url } from '../../constants/urls'
 import styles from './style'
-import { Context } from '../../context/Context'
 import {
   Text,
   ScrollView,
   View,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native'
 
 
 
-const Transfer = ()=>{
-  const { setters } = useContext(Context)
-  const [email, setEmail] = useState('')
+const Transfer = (props)=>{
   const [cpf, setCpf] = useState('')
   const [recipientName, setRecipientName] = useState('')
   const [recipientCpf, setRecipientCpf] = useState('')
   const [value, setValue] = useState('')
+  const [password, setPassword] = useState('')
 
 
 
   useEffect(()=>{
-    setters.noToken()
+    noToken()
   }, [])
 
 
-  const transfer = ()=>{
+  const noToken = async()=>{
+    try{
+      const value = await AsyncStorage.getItem('token')
+      if(!value){
+        props.navigation.navigate('Login')
+      }
+    }catch(e){
+      alert(e)
+    }
+  }
+
+
+  const transfer = async()=>{
     const body = {
-      email,
+      token: await AsyncStorage.getItem('token'),
+      password,
       cpf,
       recipientName,
       recipientCpf,
@@ -38,25 +51,32 @@ const Transfer = ()=>{
     }
     axios.post(`${url}/accounts/transfer`, body).then(res=>{
       alert(res.data)
-      setName('')
+      setPassword('')
       setCpf('')
       setRecipientCpf('')
       setRecipientName('')
       setValue('')
     }).catch(err=>{
-      alert(err.response.data.message)
+      const msg = err.response.data
+      if(msg === 'jwt expired'){
+        Alert.alert(
+          'Token expirado!',
+          'Por motivos de segurança você deve efetuar login novamente'
+        )
+      }else{
+        Alert.alert(
+          'Erro ao realizar transferência:',
+          err.response.data
+          )
+      }
+      
     })
   }
 
 
   return(
     <ScrollView>
-      <View style={styles.container}>
-
-        <TextInput style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-          placeholder='nome@email.com'/>
+      <View style={styles.container}>        
 
         <TextInput style={styles.input}
           onChangeText={setCpf}
@@ -84,6 +104,12 @@ const Transfer = ()=>{
           keyboardType='numeric'
           placeholder='Valor'
           placeholderTextColor='gray'/>
+        
+        <TextInput style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder='Senha'
+          secureTextEntry={true}/>
 
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn}

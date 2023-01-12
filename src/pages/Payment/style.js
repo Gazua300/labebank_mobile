@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 10
   },
+  inputDate: {
+    position: 'absolute',
+    top: 5,
+    right: 15
+  },
   btnContainer: {
     alignItems: 'center'
   },

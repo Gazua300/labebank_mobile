@@ -19,7 +19,7 @@ export default function Splash(props){
             <LottieView
                 autoPlay
                 speed={1.5}
-                source={require('../../assets/45945-bank-building.json')}
+                source={require('../../../assets/45945-bank-building.json')}
                 />
         </View>
     )

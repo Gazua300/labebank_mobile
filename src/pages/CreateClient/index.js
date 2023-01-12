@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import axios from 'axios'
 import { url } from '../../constants/urls'
 import { Context } from '../../context/Context'
@@ -8,24 +8,19 @@ import {
   ScrollView,
   View,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native'
 
 
 
 const CreateClient = (props)=>{
-  const { setters } = useContext(Context)
+  const { setters, requests } = useContext(Context)
   const [name, setName] = useState('')
   const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [date, setDate] = useState('')
   const [password, setPassword] = useState('')
-  const [passwordConf, setPasswordConf] = useState('')
-
-
-
-  
-  
+  const [passwordConf, setPasswordConf] = useState('')  
   
 
 
@@ -40,7 +35,9 @@ const CreateClient = (props)=>{
     }
     
     axios.post(`${url}/accounts/create`, body).then(res=>{
-      setters.getToken(res.data)
+      setters.getToken(res.data.token)
+      setters.getId(res.data.id)
+      requests.getUser()
       props.navigation.navigate('Balance')
       setName('')
       setCpf('')

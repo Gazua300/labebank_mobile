@@ -1,41 +1,67 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from './style'
 import { url } from '../../constants/urls'
 import { convertDate } from '../../utils/convertDate'
-import { Context } from '../../context/Context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   ScrollView,
   TextInput,
   View,
   TouchableOpacity,
-  Text
+  Text,
+  Alert
 } from 'react-native'
 
 
 
-const Statement = ()=>{
-  const { setters } = useContext(Context)
-  const [email, setEmail] = useState('')
+const Statement = (props)=>{
   const [cpf, setCpf] = useState('')
+  const [password, setPassword] = useState('')
   const [state, setState] = useState([])
 
 
 
   useEffect(()=>{
-    setters.noToken()
+    noToken()
   }, [])
 
 
-  const getStatement = ()=>{
+  const noToken = async()=>{
+    try{
+      const value = await AsyncStorage.getItem('token')
+      if(!value){
+        props.navigation.navigate('Login')
+      }
+    }catch(e){
+      alert(e)
+    }
+  }
+
+
+  const getStatement = async()=>{
     const body = {
-      email,
-      cpf
+      token: await AsyncStorage.getItem('token'),
+      cpf,
+      password
     }
     axios.post(`${url}/accounts/statement`, body).then(res=>{
       setState(res.data)
+      setCpf('')
+      setPassword('')
     }).catch(err=>{
-      alert(err.response.data.message)
+      const msg = err.response.data.message
+      if(msg === 'jwt expired'){
+        Alert.alert(
+          'Token expirado!', 
+          'Por motivos de segurança você deve efetuar login novamente'
+          )
+      }else{
+        Alert.alert(
+          'Erro ao gerar extrato:',
+          msg
+          )
+      }
     })
   }
 
@@ -44,16 +70,16 @@ const Statement = ()=>{
       <View style={styles.container}>
 
         <TextInput style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-          placeholder='nome@email.com'/>
-
-        <TextInput style={styles.input}
           onChangeText={setCpf}
           value={cpf}
           keyboardType='numeric'
-          placeholder='CPF'
-          placeholderTextColor='gray'/>
+          placeholder='CPF'/>
+
+        <TextInput style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder='Senha'
+          secureTextEntry={true}/>
 
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn}

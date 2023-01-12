@@ -1,54 +1,53 @@
-import React, { createContext } from "react"
+import { createContext, useState } from "react"
+import axios from 'axios'
+import { url } from "../constants/urls"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useNavigation } from "@react-navigation/native"
 
 
 export const Context = createContext()
 
 
 const AuthProvider = (props)=>{
-    const navigation = useNavigation()
+  const [user, setUser] = useState({})
 
 
-    const getToken = async(tk)=>{
-        try{
-          await AsyncStorage.setItem('token', tk)
-        }catch(e){
-          alert(e)
-        }
-      }
-    
-    
-      const token = async()=>{
-        try{
-          const value = AsyncStorage.getItem('token')
-          if(value !== null){
-            navigation.navigate('Balance')
-          }
-        }catch(e){
-          alert(e)
-        }
-      }
+  const getToken = async(tk)=>{
+    try{
+      await AsyncStorage.setItem('token', tk)
+    }catch(e){
+      alert(e)
+    }
+  }
 
 
-      const noToken = async()=>{
-        try{
-          const value = await AsyncStorage.getItem('token')
-          if(!value){
-            navigation.navigate('Login')
-          }
-        }catch(e){
-          alert(e)
-        }
-      }
+  const getId = async(id)=>{
+    try{
+      await AsyncStorage.setItem('id', id)
+    }catch(e){
+      alert(e)
+    }
+  }
 
 
-      const setters = { getToken, token, noToken }
+  const getUser = async()=>{
+    const id = await AsyncStorage.getItem('id')
 
-    return(
-        <Context.Provider value={{ setters }}>
-            {props.children}
-        </Context.Provider>
-    )
+    axios.get(`${url}/accounts/${id}`).then(res=>{
+      setUser(res.data)
+    }).catch(err=>{
+      alert(err.response.data)
+    })
+  }
+  
+  
+  const states = { user }
+  const setters = { getToken, getId }
+  const requests = { getUser }
+
+  return(
+      <Context.Provider value={{ states, setters, requests }}>
+          {props.children}
+      </Context.Provider>
+  )
 }
 export default AuthProvider

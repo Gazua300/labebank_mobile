@@ -12,7 +12,8 @@ import Statement from './src/pages/Statement'
 import Payment from './src/pages/Payment'
 import Deposit from './src/pages/Deposit'
 import Transfer from './src/pages/Transfer'
-import Splash from './src/splash/Splash'
+import Profile from './src/pages/Profile'
+import Splash from './src/pages/splash/Splash'
 import CustomDrawer from './src/components/customDrawer'
 
 
@@ -70,6 +71,13 @@ function MyDrawer(){
             component={Transfer}
             options={{
               title: 'Transferência'
+            }}/>
+          
+          <Drawer.Screen
+            name='Profile'
+            component={Profile}
+            options={{
+              title: 'Conta do Usuário'
             }}/>
 
         </Drawer.Navigator>
