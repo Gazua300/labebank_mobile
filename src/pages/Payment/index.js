@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import DateTimePicker from '@react-native-community/datetimepicker'
-import Fontisto from '@expo/vector-icons/Fontisto'
 import styles from './style'
 import axios from 'axios'
 import { url } from '../../constants/urls'
@@ -19,8 +17,7 @@ import {
 const Payment = (props)=>{
   const [password, setPassword] = useState('')
   const [cpf, setCpf] = useState('')
-  const [calendar, setCalendar] = useState(false)
-  const [date, setDate] = useState(new Date())
+  const [initialDate, setInitialDate] = useState('')
   const [value, setValue] = useState('')
   const [description, setDescription] = useState('')
 
@@ -29,6 +26,7 @@ const Payment = (props)=>{
   useEffect(()=>{
     noToken()
   }, [])
+  
 
 
   const noToken = async()=>{
@@ -43,24 +41,37 @@ const Payment = (props)=>{
   }
 
 
-  const onChange = (event, selectDate)=>{
-    setDate(selectDate)
-    console.log(selectDate)
-    setCalendar(false)
+  const onChangeText = (text)=>{
+    if(text.length === 2){
+      text = text + '/'
+    }
+    if(text.length === 5){
+      text = text + '/'
+    }
+
+    setInitialDate(text)
   }
+
 
   const pay = async()=>{
     const body = {
-      token: await AsyncStorage.getItem('token'),
       password,
       cpf,
-      initialDate: date,
+      initialDate,
       value: Number(value),
       description
     }
-    axios.post(`${url}/accounts/payment`, body).then(res=>{
+    axios({
+      method:'POST',
+      url:`${url}/accounts/payment`,
+      headers: {
+        Authorization: await AsyncStorage.getItem('token')
+      },
+      data: body
+    }).then(res=>{
       alert(res.data)
       setPassword('')
+      setInitialDate('')
       setCpf('')
       setValue('')
       setDescription('')
@@ -81,6 +92,7 @@ const Payment = (props)=>{
   }
 
 
+ 
 
   return(
     <ScrollView>
@@ -89,27 +101,24 @@ const Payment = (props)=>{
         <TextInput style={styles.input}
           onChangeText={setCpf}
           value={cpf}
+          maxLength={11}
           keyboardType='numeric'
           placeholder='CPF'
           placeholderTextColor='gray'/>
 
-        <View style={styles.input}>
-          <TouchableOpacity style={styles.inputDate}
-            onPress={()=> setCalendar(true)}>
-            <Fontisto name='date' size={25}/>        
-          </TouchableOpacity>  
-        </View>
-        {calendar &&(
-          <DateTimePicker
-            value={date}
-            onChange={()=> onChange(value)}
-            />
-        )}
         <TextInput style={styles.input}
           onChangeText={setValue}
           value={value}
           keyboardType='numeric'
           placeholder='Valor'
+          placeholderTextColor='gray'/>
+        
+        <TextInput style={styles.input}
+          value={initialDate}
+          onChangeText={onChangeText}
+          maxLength={10}
+          keyboardType='numeric'
+          placeholder='DD/MM/AAAA'
           placeholderTextColor='gray'/>
 
         <TextInput style={styles.input}
@@ -131,7 +140,6 @@ const Payment = (props)=>{
               Efetuar pagamento
             </Text>
           </TouchableOpacity>
-
         </View>
       </View>
     </ScrollView>

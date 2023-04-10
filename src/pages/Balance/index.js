@@ -28,6 +28,7 @@ const Balance = (props)=>{
   const noToken = async()=>{
     try{
       const value = await AsyncStorage.getItem('token')
+      
       if(!value){
         props.navigation.navigate('Login')
       }
@@ -40,14 +41,21 @@ const Balance = (props)=>{
 
   const getBalance = async()=>{
     const body = {
-      token: await AsyncStorage.getItem('token'),
       cpf,
       password
     }
-    axios.post(`${url}/accounts/balance`, body).then(res=>{
+    
+    axios({
+      method:'POST',
+      url:`${url}/accounts/balance`,
+      headers:{
+        Authorization: await AsyncStorage.getItem('token')
+      },
+      data: body
+    }).then(res=>{
       alert(res.data)
-      setPassword('')
       setCpf('')
+      setPassword('')
     }).catch(err=>{      
       const msg = err.response.data.message
       if(msg === 'jwt expired'){
@@ -73,6 +81,7 @@ const Balance = (props)=>{
         <TextInput style={styles.input}
           onChangeText={setCpf}
           value={cpf}
+          maxLength={11}
           keyboardType='numeric'
           placeholder='CPF'
           placeholderTextColor='gray'/>

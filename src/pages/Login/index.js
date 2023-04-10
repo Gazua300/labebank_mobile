@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import styles from './style'
 import { url } from '../../constants/urls'
-import { Context } from '../../context/Context'
 import {
   Text,
   ScrollView,
@@ -15,7 +14,6 @@ import {
 
 
 const Login = (props)=>{
-  const { setters, requests } = useContext(Context)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -30,7 +28,7 @@ const Login = (props)=>{
     try{
       const value = AsyncStorage.getItem('token')
       if(value !== null){
-        props.navigation.navigate('Balance')
+        props.navigation.navigate('MyDrawer')
       }
     }catch(e){
       alert(e)
@@ -43,13 +41,11 @@ const Login = (props)=>{
       email,
       password
     }
-    axios.post(`${url}/accounts/login`, body).then(res=>{
-      setters.getToken(res.data.token)
-      setters.getId(res.data.id)
-      requests.getUser()
-      props.navigation.navigate('Balance')
+    axios.post(`${url}/accounts/login`, body).then(async res=>{
+      await AsyncStorage.setItem('token', res.data)
       setEmail('')
       setPassword('')
+      props.navigation.navigate('MyDrawer')
     }).catch(err=>{
       alert(err.response.data)
     })
@@ -74,9 +70,7 @@ const Login = (props)=>{
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn}
             onPress={enter}>
-            <Text>
-              Entrar
-            </Text>
+            <Text>Entrar</Text>
           </TouchableOpacity>
 
         </View>

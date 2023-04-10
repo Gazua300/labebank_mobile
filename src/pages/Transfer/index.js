@@ -42,14 +42,21 @@ const Transfer = (props)=>{
 
   const transfer = async()=>{
     const body = {
-      token: await AsyncStorage.getItem('token'),
       password,
       cpf,
       recipientName,
       recipientCpf,
       value: Number(value)
     }
-    axios.post(`${url}/accounts/transfer`, body).then(res=>{
+
+    axios({
+      method:'POST',
+      url:`${url}/accounts/transfer`,
+      headers: {
+        Authorization: await AsyncStorage.getItem('token')
+      },
+      data: body
+    }).then(res=>{
       alert(res.data)
       setPassword('')
       setCpf('')

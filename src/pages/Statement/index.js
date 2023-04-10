@@ -45,7 +45,14 @@ const Statement = (props)=>{
       cpf,
       password
     }
-    axios.post(`${url}/accounts/statement`, body).then(res=>{
+    axios({
+      method:'POST',
+      url:`${url}/accounts/statement`,
+      headers: {
+        Authorization: await AsyncStorage.getItem('token')
+      },
+      data: body
+    }).then(res=>{
       setState(res.data)
       setCpf('')
       setPassword('')
@@ -72,6 +79,7 @@ const Statement = (props)=>{
         <TextInput style={styles.input}
           onChangeText={setCpf}
           value={cpf}
+          maxLength={11}
           keyboardType='numeric'
           placeholder='CPF'/>
 

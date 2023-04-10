@@ -54,7 +54,6 @@ function CustomDrawer(props){
   const logout = async()=>{
     try{
       await AsyncStorage.clear()
-      getUser()
       props.navigation.navigate('Login')
     }catch(e){
       alert(e)
@@ -70,7 +69,7 @@ function CustomDrawer(props){
         </Text>
       </View>
       <View style={styles.itemStyle}>
-        <TouchableOpacity style={styles.btnNavigator}
+        {/* <TouchableOpacity style={styles.btnNavigator}
           onPress={()=>{
             props.navigation.navigate('Login')
             token()
@@ -85,7 +84,7 @@ function CustomDrawer(props){
             getUser()
           }}>
           <Text style={styles.items}>Signin</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.btnNavigator}
           onPress={()=>{
             props.navigation.navigate('Balance')
@@ -125,14 +124,6 @@ function CustomDrawer(props){
             getUser()
           }}>
           <Text style={styles.items}>Transferência</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btnNavigator}
-          onPress={()=>{
-            props.navigation.navigate('Profile')
-            noToken()
-            getUser()
-          }}>
-          <Text style={styles.items}>Conta</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnNavigator}
           onPress={logout}>

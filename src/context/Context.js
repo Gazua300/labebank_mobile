@@ -11,24 +11,6 @@ const AuthProvider = (props)=>{
   const [user, setUser] = useState({})
 
 
-  const getToken = async(tk)=>{
-    try{
-      await AsyncStorage.setItem('token', tk)
-    }catch(e){
-      alert(e)
-    }
-  }
-
-
-  const getId = async(id)=>{
-    try{
-      await AsyncStorage.setItem('id', id)
-    }catch(e){
-      alert(e)
-    }
-  }
-
-
   const getUser = async()=>{
     const id = await AsyncStorage.getItem('id')
 
@@ -41,7 +23,7 @@ const AuthProvider = (props)=>{
   
   
   const states = { user }
-  const setters = { getToken, getId }
+  const setters = {  }
   const requests = { getUser }
 
   return(
