@@ -72,7 +72,28 @@ const Login = (props)=>{
             onPress={enter}>
             <Text>Entrar</Text>
           </TouchableOpacity>
-
+        </View>
+        <View style={{
+          flexDirection:'row',
+          justifyContent:'space-evenly',
+          alignItems:'center',
+          marginTop:30
+        }}>
+          <View style={{borderWidth:1, margin:10, width:'25%'}}/>
+          <Text style={{fontSize:18}}>Ou</Text>
+          <View style={{borderWidth:1, margin:10, width:'25%'}}/>
+        </View>
+        <View style={{
+          flexDirection:'row',
+          alignItems:'center',
+          justifyContent:'center'
+        }}>
+          <Text style={{textAlign:'center', margin:10, fontSize:16}}>Cadastra-se cliquando</Text>
+          <TouchableOpacity onPress={()=> props.navigation.navigate('Signin')}>
+            <Text style={{fontSize:16, color:'blue'}}>
+              aqui
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

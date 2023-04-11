@@ -20,6 +20,19 @@ const CreateClient = (props)=>{
   const [date, setDate] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConf, setPasswordConf] = useState('')  
+
+
+
+  const onChangeText = (text)=>{
+    if(text.lenght === 2){
+      text = text + '/'
+    }
+    if(text.lenght === 5){
+      text = text = '/'
+    }
+
+    setDate(text)
+  }
   
 
 
@@ -70,9 +83,9 @@ const CreateClient = (props)=>{
           placeholder='E-mail'/>
 
         <TextInput style={styles.input}
-          onChangeText={setDate}
+          onChangeText={onChangeText}
           value={date}
-          placeholder='Data'/>
+          placeholder='DD/MM/AAAA'/>
 
         <TextInput style={styles.input}
           onChangeText={setPassword}
